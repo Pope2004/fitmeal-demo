@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1a7f37">
+  <title>FitMeal · 健身饮食管家</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ========== 画像设置页（首次进入） ========== -->
+<section id="view-onboarding" class="view active">
+  <header class="onboarding-header">
+    <div class="brand-logo">🥗 FitMeal</div>
+    <h1>让健身和饮食，每天都有答案</h1>
+    <p class="subtitle">30 秒告诉我你的身体情况，我来生成每日练什么、吃什么</p>
+  </header>
+
+  <form id="profile-form" class="profile-form">
+    <div class="form-step" data-step="1">
+      <h2>第一步：基本身体数据</h2>
+      <div class="field">
+        <label>性别</label>
+        <div class="chip-group">
+          <label class="chip"><input type="radio" name="gender" value="male" checked><span>男</span></label>
+          <label class="chip"><input type="radio" name="gender" value="female"><span>女</span></label>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>身高 (cm)</label>
+          <input type="number" name="height" min="120" max="230" value="175" required>
+        </div>
+        <div class="field">
+          <label>体重 (kg)</label>
+          <input type="number" name="weight" min="30" max="200" step="0.1" value="70" required>
+        </div>
+      </div>
+      <div class="field">
+        <label>年龄</label>
+        <input type="number" name="age" min="12" max="80" value="25" required>
+      </div>
+    </div>
+
+    <div class="form-step hidden" data-step="2">
+      <h2>第二步：生活与目标</h2>
+      <div class="field">
+        <label>活动水平</label>
+        <div class="option-list">
+          <label class="option"><input type="radio" name="activity" value="1.2" checked><span>久坐（办公室，几乎不动）</span></label>
+          <label class="option"><input type="radio" name="activity" value="1.375"><span>轻度（每周 1–3 次运动）</span></label>
+          <label class="option"><input type="radio" name="activity" value="1.55"><span>中度（每周 3–5 次运动）</span></label>
+          <label class="option"><input type="radio" name="activity" value="1.9"><span>高度（每日高强度训练）</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label>你的目标</label>
+        <div class="option-list">
+          <label class="option"><input type="radio" name="goal" value="fatloss" checked><span>减脂（热量赤字）</span></label>
+          <label class="option"><input type="radio" name="goal" value="muscle"><span>增肌（热量盈余）</span></label>
+          <label class="option"><input type="radio" name="goal" value="tone"><span>塑形（维持 + 力量）</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label>运动经验</label>
+        <div class="option-list">
+          <label class="option"><input type="radio" name="experience" value="beginner" checked><span>零基础 / 刚起步</span></label>
+          <label class="option"><input type="radio" name="experience" value="intermediate"><span>有经验（半年以上规律训练）</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-step hidden" data-step="3">
+      <h2>第三步：饮食偏好（可选）</h2>
+      <div class="field">
+        <label>我偏好 / 避免</label>
+        <div class="chip-group multi">
+          <label class="chip"><input type="checkbox" name="pref" value="vegetarian"><span>素食</span></label>
+          <label class="chip"><input type="checkbox" name="pref" value="high-protein"><span>高蛋白</span></label>
+          <label class="chip"><input type="checkbox" name="pref" value="low-carb"><span>低碳水</span></label>
+          <label class="chip"><input type="checkbox" name="pref" value="no-seafood"><span>不吃海鲜</span></label>
+          <label class="chip"><input type="checkbox" name="pref" value="no-dairy"><span>不喝牛奶</span></label>
+          <label class="chip"><input type="checkbox" name="pref" value="no-gluten"><span>不吃面食</span></label>
+        </div>
+      </div>
+
+      <div class="preview-box" id="calorie-preview">
+        <div class="preview-title">📊 为你估算的每日目标</div>
+        <div class="preview-row"><span>BMR 基础代谢</span><span id="pv-bmr">—</span> kcal</div>
+        <div class="preview-row"><span>TDEE 每日消耗</span><span id="pv-tdee">—</span> kcal</div>
+        <div class="preview-row highlight"><span>目标摄入（根据目标调整）</span><span id="pv-target">—</span> kcal</div>
+        <div class="preview-row"><span>训练频率</span><span id="pv-frequency">—</span></div>
+      </div>
+    </div>
+
+    <div class="step-controls">
+      <button type="button" id="btn-prev" class="btn ghost hidden">上一步</button>
+      <button type="button" id="btn-next" class="btn primary">下一步</button>
+      <button type="submit" id="btn-submit" class="btn primary hidden">生成我的计划 🚀</button>
+    </div>
+  </form>
+</section>
+
+<!-- ========== 主应用壳 ========== -->
+<section id="view-app" class="view">
+  <!-- 顶部状态栏 -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="greeting">嗨，<span id="user-name">朋友</span> 👋</div>
+      <div class="date-line" id="date-line">今天是 10月28日 周二</div>
+    </div>
+    <button class="avatar-btn" id="btn-profile-edit" title="编辑画像">⚙️</button>
+  </header>
+
+  <!-- Tab 导航 -->
+  <nav class="tab-nav">
+    <button class="tab-btn active" data-tab="today">今日</button>
+    <button class="tab-btn" data-tab="plan">周计划</button>
+    <button class="tab-btn" data-tab="diet">饮食</button>
+    <button class="tab-btn" data-tab="stats">进度</button>
+  </nav>
+
+  <!-- Tab 内容 -->
+  <main class="tab-content">
+
+    <!-- Today Tab -->
+    <div class="tab-pane active" data-pane="today">
+      <div class="card summary-card">
+        <div class="card-title">今日目标</div>
+        <div class="summary-metrics">
+          <div class="metric">
+            <div class="metric-value" id="sum-kcal">—</div>
+            <div class="metric-label">目标 kcal</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value" id="sum-carbs">—g</div>
+            <div class="metric-label">碳水</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value" id="sum-protein">—g</div>
+            <div class="metric-label">蛋白</div>
+          </div>
+          <div class="metric">
+            <div class="metric-value" id="sum-fat">—g</div>
+            <div class="metric-label">脂肪</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title-row">
+          <span class="card-title">⏰ 今日安排</span>
+          <span class="completion-badge" id="today-completion">完成 0/0</span>
+        </div>
+        <div class="timeline" id="today-timeline"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🎯 今日完成度</div>
+        <div class="ring-container">
+          <svg class="progress-ring" width="180" height="180" viewBox="0 0 180 180">
+            <circle class="ring-bg" cx="90" cy="90" r="75" stroke-width="12"/>
+            <circle class="ring-progress" id="ring-today" cx="90" cy="90" r="75" stroke-width="12" stroke-dasharray="471" stroke-dashoffset="471"/>
+          </svg>
+          <div class="ring-center">
+            <div class="ring-value" id="ring-value">0%</div>
+            <div class="ring-label">今日达成</div>
+          </div>
+        </div>
+        <div class="progress-hint" id="progress-hint"></div>
+      </div>
+    </div>
+
+    <!-- Plan Tab -->
+    <div class="tab-pane" data-pane="plan">
+      <div class="week-header">
+        <button class="week-nav" id="week-prev">‹</button>
+        <span class="week-label" id="week-label">第 1 周 · 10.27 – 11.02</span>
+        <button class="week-nav" id="week-next">›</button>
+      </div>
+      <div class="week-days" id="week-days"></div>
+      <div class="card" id="day-detail-card"></div>
+    </div>
+
+    <!-- Diet Tab -->
+    <div class="tab-pane" data-pane="diet">
+      <div class="card">
+        <div class="card-title">🍽️ 今日饮食</div>
+        <div class="meal-list" id="meal-list"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">📸 拍照验收</div>
+        <p class="hint-text">在某一餐旁边点击"拍照验收"，或点击下方按钮选择图片来模拟拍照。</p>
+        <div class="photo-simulator">
+          <input type="file" id="photo-input" accept="image/*" hidden>
+          <button class="btn primary" id="btn-photo-open">📷 选择一张食物照片</button>
+          <div class="photo-preview" id="photo-preview"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Tab -->
+    <div class="tab-pane" data-pane="stats">
+      <div class="card">
+        <div class="card-title">📈 过去 7 天完成度</div>
+        <div class="bar-chart" id="week-chart"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">💡 本周回顾</div>
+        <div id="week-review" class="week-review"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">🔔 提醒设置</div>
+        <div class="reminder-settings" id="reminder-settings"></div>
+        <button class="btn primary" id="btn-enable-notif">🔔 开启通知权限</button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- 拍照验收弹窗 -->
+  <div class="modal hidden" id="photo-modal">
+    <div class="modal-overlay" data-close></div>
+    <div class="modal-content">
+      <button class="modal-close" data-close>✕</button>
+      <div id="photo-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast hidden"></div>
+
+</section>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
