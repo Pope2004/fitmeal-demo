@@ -1,56 +1,117 @@
 /* ========= FitMeal · Static Data Libraries ========= */
 
-// 训练动作库（按部位分类）
+// ===================== 训练动作库 =====================
+// demo: 示意图姿态编码（由 app.js 渲染成极简动作示意）
+// tips: 3 条可执行要点（示范动作时逐条看）
 const EXERCISE_LIBRARY = {
   // 胸部
   chest: [
-    { name: "俯卧撑", muscle: "胸", equipment: "徒手", sets: 3, reps: "10-12", duration: 60, essence: "身体成直线，核心收紧，下降到胸部接近地面", mistake: "塌腰或撅屁股" },
-    { name: "哑铃卧推", muscle: "胸", equipment: "哑铃", sets: 3, reps: "10", duration: 90, essence: "肩胛收紧，推起时手臂微内收", mistake: "过度外展肩膀" },
-    { name: "坐姿器械推胸", muscle: "胸", equipment: "器械", sets: 3, reps: "12", duration: 75, essence: "双脚稳定，推至手臂微伸", mistake: "耸肩借力" },
-    { name: "哑铃飞鸟", muscle: "胸", equipment: "哑铃", sets: 3, reps: "12", duration: 60, essence: "肘关节微屈，像抱树一样合拢", mistake: "直臂伸展压力全在关节" },
-    { name: "上斜俯卧撑", muscle: "上胸", equipment: "徒手", sets: 3, reps: "8-10", duration: 50, essence: "脚放高位，身体直线", mistake: "重心太靠后" },
+    { name: "俯卧撑", muscle: "胸", equipment: "徒手", sets: 3, reps: "10-12", duration: 60, demo: "push",
+      tips: ["手掌略宽于肩，肘部与身体约 45°", "全程核心收紧，身体成一条直线", "下放到胸口离地约一拳，推起时呼气"] },
+    { name: "哑铃卧推", muscle: "胸", equipment: "哑铃", sets: 3, reps: "10", duration: 90, demo: "press",
+      tips: ["肩胛骨收紧下沉，背部贴紧凳面", "手腕保持中立，哑铃在乳头上方", "下放到大臂平行地面，不要弹胸"] },
+    { name: "坐姿器械推胸", muscle: "胸", equipment: "器械", sets: 3, reps: "12", duration: 75, demo: "press",
+      tips: ["座椅高度调到握把与胸线齐平", "推起时手臂微屈，不要锁死", "回收控制 2 秒，别让配重重砸"] },
+    { name: "哑铃飞鸟", muscle: "胸", equipment: "哑铃", sets: 3, reps: "12", duration: 60, demo: "fly",
+      tips: ["肘部微屈并固定角度，只动肩关节", "打开到与肩平行即可，别过度下沉", "想象抱树，顶点停顿 1 秒"] },
+    { name: "上斜俯卧撑", muscle: "上胸", equipment: "徒手", sets: 3, reps: "8-10", duration: 50, demo: "push",
+      tips: ["脚放高位，手撑地成一条斜线", "下放时胸口贴近支撑面", "臀部别下沉，保持躯干刚性"] },
   ],
   // 背部
   back: [
-    { name: "引体向上", muscle: "背", equipment: "单杠", sets: 3, reps: "6-8", duration: 70, essence: "挺胸，拉到下巴过杠", mistake: "耸肩或前后摆动" },
-    { name: "高位下拉", muscle: "背", equipment: "器械", sets: 3, reps: "10-12", duration: 75, essence: "肘向下向后拉，肩胛下沉", mistake: "只靠手臂发力" },
-    { name: "哑铃单臂划船", muscle: "背", equipment: "哑铃", sets: 3, reps: "10/侧", duration: 60, essence: "腰背平，肘向后拉触腰侧", mistake: "驼背或转体借力" },
-    { name: "坐姿绳索划船", muscle: "背", equipment: "器械", sets: 3, reps: "12", duration: 70, essence: "挺胸，拉至下腹", mistake: "弯腰过度" },
-    { name: "反向飞鸟", muscle: "下背/后束", equipment: "哑铃", sets: 3, reps: "15", duration: 50, essence: "肩胛后缩，手臂向外展开", mistake: "耸肩" },
+    { name: "引体向上", muscle: "背", equipment: "单杠", sets: 3, reps: "6-8", duration: 70, demo: "pullup",
+      tips: ["先沉肩，再用手肘带动身体向上", "下巴过杠即可，不要甩腿借力", "下放控制 2 秒到手臂微屈"] },
+    { name: "高位下拉", muscle: "背", equipment: "器械", sets: 3, reps: "10-12", duration: 75, demo: "pulldown",
+      tips: ["坐稳，先下沉肩胛再开始拉", "把手拉到锁骨附近，肘向地面走", "回程慢放，别让配重带跑身体"] },
+    { name: "哑铃单臂划船", muscle: "背", equipment: "哑铃", sets: 3, reps: "10/侧", duration: 60, demo: "row",
+      tips: ["一手撑凳，背部保持水平", "肘贴近身体向后拉，触到腰侧", "肩胛骨后缩，不要转体借力"] },
+    { name: "坐姿绳索划船", muscle: "背", equipment: "器械", sets: 3, reps: "12", duration: 70, demo: "row",
+      tips: ["挺胸收腹，别弓背", "拉到下腹位置，肘向后不向外", "回程让肩胛充分前伸"] },
+    { name: "反向飞鸟", muscle: "下背/后束", equipment: "哑铃", sets: 3, reps: "15", duration: 50, demo: "flyback",
+      tips: ["上身前倾，背部保持平直", "手臂向外画弧，全程别耸肩", "小重量多次数，感受后束发力"] },
   ],
   // 腿部
   legs: [
-    { name: "深蹲", muscle: "股四/臀", equipment: "徒手/杠铃", sets: 3, reps: "12", duration: 90, essence: "膝盖跟脚尖方向，蹲至大腿平行", mistake: "膝盖内扣或塌腰" },
-    { name: "箭步蹲", muscle: "股四/臀", equipment: "哑铃", sets: 3, reps: "10/侧", duration: 80, essence: "前膝不超脚尖，后膝接近地面", mistake: "重心前倾" },
-    { name: "硬拉", muscle: "后链/臀", equipment: "杠铃", sets: 3, reps: "8", duration: 100, essence: "背平，拉至髋部站直", mistake: "驼背或猛拉" },
-    { name: "腿举", muscle: "股四", equipment: "器械", sets: 3, reps: "12", duration: 80, essence: "双脚与肩宽，推至腿微伸", mistake: "膝盖锁死" },
-    { name: "臀桥", muscle: "臀", equipment: "徒手/杠铃", sets: 3, reps: "15", duration: 60, essence: "顶至肩髋膝一条直线，顶峰收缩2秒", mistake: "用腰发力" },
-    { name: "小腿提踵", muscle: "小腿", equipment: "器械", sets: 3, reps: "15-20", duration: 45, essence: "顶峰停1秒，底部充分拉伸", mistake: "动作太快没控制" },
+    { name: "深蹲", muscle: "股四/臀", equipment: "徒手/杠铃", sets: 3, reps: "12", duration: 90, demo: "squat",
+      tips: ["脚略宽于肩，脚尖外展约 15°", "下蹲时膝盖对准脚尖，臀部向后坐", "蹲到大腿平行地面，起身呼气"] },
+    { name: "箭步蹲", muscle: "股四/臀", equipment: "哑铃", sets: 3, reps: "10/侧", duration: 80, demo: "lunge",
+      tips: ["前后脚距约一条腿长", "下沉到后膝接近地面", "重心压在前脚跟，身体别前倾"] },
+    { name: "硬拉", muscle: "后链/臀", equipment: "杠铃", sets: 3, reps: "8", duration: 100, demo: "hinge",
+      tips: ["杠铃贴着小腿，背全程平直", "髋部向后推，感受腘绳肌被拉长", "起身时臀腿同步发力，别用腰"] },
+    { name: "腿举", muscle: "股四", equipment: "器械", sets: 3, reps: "12", duration: 80, demo: "legpress",
+      tips: ["脚掌踩在踏板中上部，与肩同宽", "下放到膝盖约 90°，别让腰离开垫", "推起时膝盖不要锁死"] },
+    { name: "臀桥", muscle: "臀", equipment: "徒手/杠铃", sets: 3, reps: "15", duration: 60, demo: "bridge",
+      tips: ["脚跟靠近臀部，脚尖微外撇", "顶到肩髋膝一条直线，夹臀 2 秒", "用臀发力，不要用腰往上顶"] },
+    { name: "小腿提踵", muscle: "小腿", equipment: "器械", sets: 3, reps: "15-20", duration: 45, demo: "calf",
+      tips: ["前脚掌踩在边缘，脚跟充分下沉", "顶峰停 1 秒再落下", "全程慢速控制，别弹跳"] },
   ],
   // 肩部
   shoulders: [
-    { name: "哑铃肩推", muscle: "前中束", equipment: "哑铃", sets: 3, reps: "10", duration: 75, essence: "推至头顶上方，不锁关节", mistake: "肋骨外翻借力" },
-    { name: "侧平举", muscle: "中束", equipment: "哑铃", sets: 3, reps: "12-15", duration: 55, essence: "微屈肘，向两侧抬起至与肩平", mistake: "斜方肌耸肩" },
-    { name: "前平举", muscle: "前束", equipment: "哑铃", sets: 3, reps: "12", duration: 50, essence: "抬至眼睛高度，控制下放", mistake: "摆身体借力" },
-    { name: "阿诺德推举", muscle: "全肩", equipment: "哑铃", sets: 3, reps: "10", duration: 70, essence: "翻转哑铃同时上推", mistake: "旋转太快失去控制" },
+    { name: "哑铃肩推", muscle: "前中束", equipment: "哑铃", sets: 3, reps: "10", duration: 75, demo: "pressup",
+      tips: ["核心收紧，别让肋骨外翻", "哑铃从耳侧推到头顶上方", "下放到与耳齐平，不要压脖子"] },
+    { name: "侧平举", muscle: "中束", equipment: "哑铃", sets: 3, reps: "12-15", duration: 55, demo: "raiseside",
+      tips: ["肘部微屈，由肩带动手臂抬起", "抬到与肩平行即可，别耸肩", "下放慢 2 秒，感受中束"] },
+    { name: "前平举", muscle: "前束", equipment: "哑铃", sets: 3, reps: "12", duration: 50, demo: "raisefront",
+      tips: ["手臂微屈，抬到眼睛高度", "身体别后仰借力", "下放控制，不要自由落体"] },
+    { name: "阿诺德推举", muscle: "全肩", equipment: "哑铃", sets: 3, reps: "10", duration: 70, demo: "rotate",
+      tips: ["起始掌心朝自己，推起时旋转", "旋转与上推同步，别抢速度", "核心稳定，别塌腰"] },
   ],
   // 手臂
   arms: [
-    { name: "哑铃二头弯举", muscle: "二头", equipment: "哑铃", sets: 3, reps: "12", duration: 50, essence: "上臂固定，弯举顶峰收缩", mistake: "晃身体甩起来" },
-    { name: "绳索下压", muscle: "三头", equipment: "器械", sets: 3, reps: "12", duration: 50, essence: "肘固定，压至手臂伸直", mistake: "下拉过程肘张开" },
-    { name: "窄距俯卧撑", muscle: "三头/胸中缝", equipment: "徒手", sets: 3, reps: "10", duration: 50, essence: "手距比肩窄，身体直线", mistake: "塌腰" },
-    { name: "锤式弯举", muscle: "肱肌/二头", equipment: "哑铃", sets: 3, reps: "12", duration: 45, essence: "掌心相对，向肩弯举", mistake: "翻转手腕" },
+    { name: "哑铃二头弯举", muscle: "二头", equipment: "哑铃", sets: 3, reps: "12", duration: 50, demo: "curl",
+      tips: ["上臂夹紧身体，保持不动", "弯到顶峰收缩 1 秒", "下放慢 3 秒，控制离心"] },
+    { name: "绳索下压", muscle: "三头", equipment: "器械", sets: 3, reps: "12", duration: 50, demo: "pushdown",
+      tips: ["肘固定在身体两侧，只动小臂", "压到底时手臂伸直，别耸肩", "回程控制在 90° 左右"] },
+    { name: "窄距俯卧撑", muscle: "三头/胸中缝", equipment: "徒手", sets: 3, reps: "10", duration: 50, demo: "pushnarrow",
+      tips: ["手距比肩窄，肘贴近身体", "身体成直线，别塌腰", "下放到胸口接近地面"] },
+    { name: "锤式弯举", muscle: "肱肌/二头", equipment: "哑铃", sets: 3, reps: "12", duration: 45, demo: "hammer",
+      tips: ["掌心相对，全程别翻手腕", "上臂固定，肘是唯一转轴", "两侧交替，控制离心阶段"] },
   ],
   // 核心
   core: [
-    { name: "平板支撑", muscle: "核心", equipment: "徒手", sets: 3, reps: "30-60秒", duration: 60, essence: "身体成一直线，臀不塌不翘", mistake: "耸肩或塌腰" },
-    { name: "卷腹", muscle: "腹直肌", equipment: "徒手", sets: 3, reps: "15-20", duration: 50, essence: "肋骨向下收，而非抬头", mistake: "脖子发力" },
-    { name: "俄罗斯转体", muscle: "腹斜", equipment: "徒手/哑铃", sets: 3, reps: "20/侧", duration: 60, essence: "腰背微后仰，核心收紧转体", mistake: "腿乱晃" },
-    { name: "登山跑", muscle: "核心/髋屈", equipment: "徒手", sets: 3, reps: "30秒", duration: 50, essence: "平板支撑姿势快速交替提膝", mistake: "臀部起伏太大" },
+    { name: "平板支撑", muscle: "核心", equipment: "徒手", sets: 3, reps: "30-60秒", duration: 60, demo: "plank",
+      tips: ["肘在肩正下方，臀不塌不翘", "收腹夹臀，肋骨向下沉", "保持均匀呼吸，别憋气"] },
+    { name: "卷腹", muscle: "腹直肌", equipment: "徒手", sets: 3, reps: "15-20", duration: 50, demo: "crunch",
+      tips: ["下背贴地，用腹部卷起上身", "下巴微收，别用脖子发力", "只起到肩胛离地，下落控制"] },
+    { name: "俄罗斯转体", muscle: "腹斜", equipment: "徒手/哑铃", sets: 3, reps: "20/侧", duration: 60, demo: "twist",
+      tips: ["腰背挺直并微后仰", "转动来自胸椎，不是手臂甩", "双脚可落地降低难度"] },
+    { name: "登山跑", muscle: "核心/髋屈", equipment: "徒手", sets: 3, reps: "30秒", duration: 50, demo: "mountain",
+      tips: ["手腕在肩下方，身体成直线", "提膝到胸口，臀部别翘起", "节奏稳定，别越跑越快"] },
   ],
 };
 
-// 食物库（含每份约100g的热量和宏量，单位 g）
+// 动作示意图姿态（极简 stick figure，坐标在 56×56 画布内）
+const DEMO_POSES = {
+  push:        { head: [14, 10], shoulder: [14, 16], hip: [14, 32], arm: [[[14, 16], [22, 20], [22, 30]], [[14, 16], [7, 21], [7, 13]]], leg: [[[14, 32], [9, 47]], [[14, 32], [20, 47]]], arrow: [27, 34, 27, 18] },
+  press:       { head: [13, 9], shoulder: [13, 15], hip: [13, 34], arm: [[[13, 15], [7, 12], [7, 5]], [[13, 15], [19, 12], [19, 5]]], leg: [[[13, 34], [7, 44], [7, 49]], [[13, 34], [19, 44], [19, 49]]], arrow: [24, 26, 24, 10] },
+  fly:         { head: [13, 9], shoulder: [13, 17], hip: [13, 34], arm: [[[13, 17], [5, 20], [5, 13]], [[13, 17], [21, 20], [21, 13]]], leg: [[[13, 34], [8, 47]], [[13, 34], [18, 47]]], arrow: [23, 22, 28, 12] },
+  flyback:     { head: [16, 9], shoulder: [14, 18], hip: [11, 32], arm: [[[14, 18], [5, 15], [4, 8]], [[14, 18], [23, 15], [24, 8]]], leg: [[[11, 32], [7, 46]], [[11, 32], [17, 46]]], arrow: [27, 24, 32, 24] },
+  pullup:      { head: [13, 13], shoulder: [13, 19], hip: [13, 33], arm: [[[13, 19], [6, 12], [6, 5]], [[13, 19], [20, 12], [20, 5]]], leg: [[[13, 33], [9, 47]], [[13, 33], [17, 47]]], arrow: [26, 34, 26, 20] },
+  pulldown:    { head: [13, 12], shoulder: [13, 18], hip: [13, 33], arm: [[[13, 18], [5, 8], [13, 6]], [[13, 18], [21, 8], [13, 6]]], leg: [[[13, 33], [9, 46]], [[13, 33], [17, 46]]], arrow: [26, 8, 26, 20] },
+  row:         { head: [18, 14], shoulder: [15, 19], hip: [9, 30], arm: [[[15, 19], [22, 25], [28, 24]], [[15, 19], [21, 27], [26, 30]]], leg: [[[9, 30], [6, 44]], [[9, 30], [14, 44]]], arrow: [31, 22, 24, 22] },
+  squat:       { head: [13, 8], shoulder: [13, 14], hip: [13, 27], arm: [[[13, 14], [8, 22], [8, 28]], [[13, 14], [18, 22], [18, 28]]], leg: [[[13, 27], [7, 35], [7, 48]], [[13, 27], [19, 35], [19, 48]]], arrow: [24, 16, 24, 32] },
+  hinge:       { head: [18, 9], shoulder: [15, 16], hip: [9, 30], arm: [[[15, 16], [15, 30], [15, 40]], [[15, 16], [16, 31], [16, 42]]], leg: [[[9, 30], [8, 44]], [[9, 30], [14, 44]]], arrow: [25, 34, 25, 18] },
+  lunge:       { head: [13, 8], shoulder: [13, 15], hip: [13, 29], arm: [[[13, 15], [7, 24], [7, 31]], [[13, 15], [19, 24], [19, 31]]], leg: [[[13, 29], [3, 40], [2, 49]], [[13, 29], [20, 38], [24, 49]]], arrow: [27, 24, 27, 38] },
+  legpress:    { head: [9, 20], shoulder: [14, 25], hip: [20, 30], arm: [[[14, 25], [9, 30], [9, 36]], [[14, 25], [18, 33], [18, 39]]], leg: [[[20, 30], [32, 25], [40, 29]], [[20, 30], [32, 30], [40, 34]]], arrow: [44, 22, 44, 34] },
+  bridge:      { head: [6, 30], shoulder: [12, 33], hip: [22, 34], arm: [[[12, 33], [10, 42], [16, 45]], [[12, 33], [17, 40], [22, 45]]], leg: [[[22, 34], [34, 31], [34, 42]], [[22, 34], [32, 35], [35, 44]]], arrow: [22, 40, 22, 27] },
+  calf:        { head: [13, 8], shoulder: [13, 15], hip: [13, 29], arm: [[[13, 15], [8, 22], [8, 28]], [[13, 15], [18, 22], [18, 28]]], leg: [[[13, 29], [12, 40], [12, 47]], [[13, 29], [16, 40], [16, 47]]], arrow: [24, 46, 24, 34] },
+  pressup:     { head: [13, 9], shoulder: [13, 16], hip: [13, 33], arm: [[[13, 16], [6, 10], [6, 3]], [[13, 16], [20, 10], [20, 3]]], leg: [[[13, 33], [8, 45], [7, 49]], [[13, 33], [18, 45], [19, 49]]], arrow: [26, 26, 26, 10] },
+  raiseside:   { head: [13, 9], shoulder: [13, 16], hip: [13, 33], arm: [[[13, 16], [22, 16], [30, 16]], [[13, 16], [4, 16], [2, 16]]], leg: [[[13, 33], [9, 47]], [[13, 33], [17, 47]]], arrow: [31, 25, 31, 16] },
+  raisefront:  { head: [16, 9], shoulder: [14, 16], hip: [14, 33], arm: [[[14, 16], [24, 18], [32, 18]], [[14, 16], [22, 21], [30, 19]]], leg: [[[14, 33], [10, 47]], [[14, 33], [18, 47]]], arrow: [34, 25, 34, 17] },
+  rotate:      { head: [13, 9], shoulder: [13, 16], hip: [13, 33], arm: [[[13, 16], [7, 12], [9, 5]], [[13, 16], [19, 12], [21, 5]]], leg: [[[13, 33], [9, 47]], [[13, 33], [17, 47]]], arrow: [26, 30, 26, 8] },
+  pushnarrow:  { head: [14, 10], shoulder: [14, 16], hip: [14, 32], arm: [[[14, 16], [20, 22], [20, 30]], [[14, 16], [8, 22], [8, 30]]], leg: [[[14, 32], [9, 47]], [[14, 32], [20, 47]]], arrow: [25, 34, 25, 19] },
+  curl:        { head: [13, 9], shoulder: [13, 15], hip: [13, 33], arm: [[[13, 15], [18, 24], [20, 16]], [[13, 15], [8, 24], [6, 16]]], leg: [[[13, 33], [9, 47]], [[13, 33], [17, 47]]], arrow: [23, 26, 21, 18] },
+  hammer:      { head: [13, 9], shoulder: [13, 15], hip: [13, 33], arm: [[[13, 15], [19, 24], [20, 15]], [[13, 15], [7, 24], [6, 15]]], leg: [[[13, 33], [9, 47]], [[13, 33], [17, 47]]], arrow: [24, 27, 23, 17] },
+  pushdown:    { head: [13, 9], shoulder: [13, 15], hip: [13, 33], arm: [[[13, 15], [18, 22], [18, 30]], [[13, 15], [8, 22], [8, 30]]], leg: [[[13, 33], [9, 47]], [[13, 33], [17, 47]]], arrow: [22, 22, 22, 34] },
+  plank:       { head: [16, 16], shoulder: [13, 24], hip: [6, 30], arm: [[[13, 24], [13, 34], [13, 42]], [[13, 24], [11, 34], [11, 42]]], leg: [[[6, 30], [0, 40], [-1, 48]], [[6, 30], [4, 38], [2, 48]]], arrow: [20, 28, 20, 40] },
+  crunch:      { head: [10, 12], shoulder: [13, 20], hip: [19, 30], arm: [[[13, 20], [8, 24], [12, 26]], [[13, 20], [18, 24], [14, 26]]], leg: [[[19, 30], [30, 28], [34, 36]], [[19, 30], [29, 33], [33, 40]]], arrow: [6, 14, 14, 20] },
+  twist:       { head: [13, 10], shoulder: [13, 17], hip: [13, 33], arm: [[[13, 17], [6, 22], [3, 27]], [[13, 17], [22, 20], [27, 22]]], leg: [[[13, 33], [8, 43], [13, 48]], [[13, 33], [18, 43], [13, 48]]], arrow: [3, 12, 27, 12] },
+  mountain:    { head: [18, 17], shoulder: [15, 24], hip: [7, 28], arm: [[[15, 24], [15, 34], [15, 42]], [[15, 24], [13, 34], [13, 42]]], leg: [[[7, 28], [17, 34], [17, 44]], [[7, 28], [1, 38], [0, 47]]], arrow: [22, 30, 22, 40] },
+};
+
+// ===================== 食物库 =====================
+// 食材类：营养值按每 100g 计（unitGrams = 100）
+// 菜肴类：营养值按整份计（unitGrams = 整份克数）
 const FOOD_LIBRARY = {
   // 主食
   staple: [
@@ -63,6 +124,17 @@ const FOOD_LIBRARY = {
     { name: "土豆", kcal: 77, protein: 2.0, carbs: 16.5, fat: 0.2, category: "主食" },
     { name: "全麦面包", kcal: 246, protein: 10.0, carbs: 49.0, fat: 3.6, category: "主食" },
     { name: "馒头", kcal: 223, protein: 7.0, carbs: 47.0, fat: 1.1, category: "主食" },
+    { name: "紫薯", kcal: 106, protein: 1.6, carbs: 24.0, fat: 0.2, category: "主食" },
+    { name: "山药", kcal: 57, protein: 1.9, carbs: 12.4, fat: 0.2, category: "主食" },
+    { name: "南瓜", kcal: 23, protein: 0.7, carbs: 5.3, fat: 0.1, category: "主食" },
+    { name: "荞麦面(熟)", kcal: 99, protein: 3.4, carbs: 21.0, fat: 0.4, category: "主食" },
+    { name: "意大利面(熟)", kcal: 131, protein: 5.0, carbs: 25.0, fat: 1.1, category: "主食" },
+    { name: "米粉(熟)", kcal: 110, protein: 1.5, carbs: 24.0, fat: 0.2, category: "主食" },
+    { name: "藜麦(熟)", kcal: 120, protein: 4.4, carbs: 21.3, fat: 1.9, category: "主食" },
+    { name: "玉米粒", kcal: 86, protein: 3.3, carbs: 19.0, fat: 1.0, category: "主食" },
+    { name: "年糕", kcal: 156, protein: 3.3, carbs: 34.0, fat: 0.6, category: "主食" },
+    { name: "饺子(猪肉)", kcal: 240, protein: 9.0, carbs: 26.0, fat: 11.0, category: "主食" },
+    { name: "包子(肉馅)", kcal: 220, protein: 7.0, carbs: 30.0, fat: 7.0, category: "主食" },
   ],
   // 蛋白类
   protein: [
@@ -77,6 +149,18 @@ const FOOD_LIBRARY = {
     { name: "虾仁", kcal: 99, protein: 20.5, carbs: 2.5, fat: 0.7, category: "蛋白" },
     { name: "牛奶", kcal: 54, protein: 3.0, carbs: 3.4, fat: 3.2, category: "蛋白" },
     { name: "希腊酸奶", kcal: 59, protein: 10.0, carbs: 3.6, fat: 0.4, category: "蛋白" },
+    { name: "羊肉", kcal: 203, protein: 19.0, carbs: 0, fat: 13.0, category: "蛋白" },
+    { name: "鸭胸肉", kcal: 133, protein: 19.0, carbs: 0, fat: 6.6, category: "蛋白" },
+    { name: "猪里脊", kcal: 155, protein: 20.0, carbs: 0, fat: 8.0, category: "蛋白" },
+    { name: "鸡翅", kcal: 194, protein: 17.0, carbs: 0, fat: 13.0, category: "蛋白" },
+    { name: "鱿鱼", kcal: 75, protein: 17.0, carbs: 0, fat: 1.4, category: "蛋白" },
+    { name: "带鱼", kcal: 127, protein: 17.7, carbs: 3.1, fat: 4.9, category: "蛋白" },
+    { name: "金枪鱼(水浸)", kcal: 116, protein: 26.0, carbs: 0, fat: 1.0, category: "蛋白" },
+    { name: "鲈鱼", kcal: 105, protein: 18.6, carbs: 0, fat: 3.4, category: "蛋白" },
+    { name: "豆腐干", kcal: 140, protein: 16.0, carbs: 4.0, fat: 7.0, category: "蛋白" },
+    { name: "内酯豆腐", kcal: 50, protein: 5.0, carbs: 2.0, fat: 2.0, category: "蛋白" },
+    { name: "豆浆(无糖)", kcal: 31, protein: 3.0, carbs: 1.5, fat: 1.6, category: "蛋白" },
+    { name: "奶酪片", kcal: 330, protein: 25.0, carbs: 3.0, fat: 26.0, category: "蛋白" },
   ],
   // 蔬菜
   veggie: [
@@ -89,6 +173,24 @@ const FOOD_LIBRARY = {
     { name: "青椒", kcal: 22, protein: 1.0, carbs: 5.4, fat: 0.2, category: "蔬菜" },
     { name: "芦笋", kcal: 18, protein: 1.4, carbs: 3.0, fat: 0.1, category: "蔬菜" },
     { name: "蘑菇", kcal: 24, protein: 2.7, carbs: 4.1, fat: 0.1, category: "蔬菜" },
+    { name: "大白菜", kcal: 17, protein: 1.5, carbs: 3.2, fat: 0.1, category: "蔬菜" },
+    { name: "娃娃菜", kcal: 13, protein: 1.4, carbs: 2.4, fat: 0.2, category: "蔬菜" },
+    { name: "菜花", kcal: 24, protein: 2.0, carbs: 5.0, fat: 0.4, category: "蔬菜" },
+    { name: "芹菜", kcal: 22, protein: 1.2, carbs: 4.5, fat: 0.2, category: "蔬菜" },
+    { name: "豆角", kcal: 30, protein: 2.5, carbs: 5.7, fat: 0.4, category: "蔬菜" },
+    { name: "茄子", kcal: 23, protein: 1.1, carbs: 4.9, fat: 0.2, category: "蔬菜" },
+    { name: "冬瓜", kcal: 12, protein: 0.4, carbs: 2.6, fat: 0.2, category: "蔬菜" },
+    { name: "丝瓜", kcal: 20, protein: 1.0, carbs: 4.0, fat: 0.2, category: "蔬菜" },
+    { name: "莲藕", kcal: 70, protein: 1.9, carbs: 16.0, fat: 0.2, category: "蔬菜" },
+    { name: "海带", kcal: 13, protein: 1.2, carbs: 2.1, fat: 0.1, category: "蔬菜" },
+    { name: "洋葱", kcal: 40, protein: 1.1, carbs: 9.0, fat: 0.2, category: "蔬菜" },
+    { name: "木耳(水发)", kcal: 21, protein: 1.5, carbs: 6.0, fat: 0.1, category: "蔬菜" },
+    { name: "香菇", kcal: 26, protein: 2.2, carbs: 5.2, fat: 0.3, category: "蔬菜" },
+    { name: "空心菜", kcal: 20, protein: 2.6, carbs: 2.7, fat: 0.2, category: "蔬菜" },
+    { name: "油麦菜", kcal: 15, protein: 1.4, carbs: 2.1, fat: 0.4, category: "蔬菜" },
+    { name: "韭菜", kcal: 25, protein: 2.4, carbs: 4.6, fat: 0.4, category: "蔬菜" },
+    { name: "秋葵", kcal: 37, protein: 2.0, carbs: 7.0, fat: 0.1, category: "蔬菜" },
+    { name: "毛豆", kcal: 105, protein: 7.0, carbs: 19.0, fat: 0.5, category: "蔬菜" },
   ],
   // 水果
   fruit: [
@@ -97,39 +199,196 @@ const FOOD_LIBRARY = {
     { name: "橙子", kcal: 48, protein: 0.8, carbs: 11.1, fat: 0.2, category: "水果" },
     { name: "蓝莓", kcal: 57, protein: 0.7, carbs: 14.5, fat: 0.3, category: "水果" },
     { name: "火龙果", kcal: 51, protein: 1.1, carbs: 12.9, fat: 0.3, category: "水果" },
+    { name: "西瓜", kcal: 26, protein: 0.6, carbs: 5.8, fat: 0.1, category: "水果" },
+    { name: "葡萄", kcal: 43, protein: 0.5, carbs: 10.3, fat: 0.2, category: "水果" },
+    { name: "梨", kcal: 51, protein: 0.4, carbs: 13.3, fat: 0.2, category: "水果" },
+    { name: "桃子", kcal: 39, protein: 0.9, carbs: 9.5, fat: 0.1, category: "水果" },
+    { name: "草莓", kcal: 32, protein: 1.0, carbs: 7.1, fat: 0.2, category: "水果" },
+    { name: "猕猴桃", kcal: 61, protein: 0.8, carbs: 14.5, fat: 0.6, category: "水果" },
+    { name: "芒果", kcal: 35, protein: 0.6, carbs: 8.3, fat: 0.2, category: "水果" },
+    { name: "柚子", kcal: 42, protein: 0.8, carbs: 9.5, fat: 0.2, category: "水果" },
+    { name: "圣女果", kcal: 22, protein: 0.9, carbs: 4.6, fat: 0.2, category: "水果" },
+    { name: "牛油果", kcal: 160, protein: 2.0, carbs: 8.5, fat: 15.0, category: "水果" },
+    { name: "樱桃", kcal: 46, protein: 1.0, carbs: 10.2, fat: 0.2, category: "水果" },
+    { name: "荔枝", kcal: 71, protein: 0.9, carbs: 16.6, fat: 0.2, category: "水果" },
   ],
-  // 健康零食/加餐
+  // 健康零食 / 加餐
   snack: [
     { name: "坚果混合", kcal: 607, protein: 20.0, carbs: 20.0, fat: 54.0, category: "零食" },
     { name: "黑巧克力(70%)", kcal: 549, protein: 4.9, carbs: 61.0, fat: 31.0, category: "零食" },
-    { name: "蛋白粉(1勺)", kcal: 120, protein: 24.0, carbs: 3.0, fat: 1.0, category: "零食" },
-  ],
-  // 常见菜肴（估算整份）
-  dish: [
-    { name: "番茄炒蛋(1份)", kcal: 220, protein: 13.0, carbs: 14.0, fat: 12.0, category: "菜肴", portion: "约250g" },
-    { name: "清炒时蔬(1份)", kcal: 90, protein: 4.0, carbs: 8.0, fat: 5.0, category: "菜肴", portion: "约200g" },
-    { name: "宫保鸡丁", kcal: 380, protein: 28.0, carbs: 25.0, fat: 18.0, category: "菜肴", portion: "约300g" },
-    { name: "红烧肉", kcal: 480, protein: 20.0, carbs: 12.0, fat: 40.0, category: "菜肴", portion: "约150g", warn: true },
-    { name: "健身沙拉鸡胸", kcal: 320, protein: 35.0, carbs: 20.0, fat: 10.0, category: "菜肴", portion: "约400g" },
-    { name: "牛肉面", kcal: 520, protein: 25.0, carbs: 65.0, fat: 18.0, category: "菜肴", portion: "1碗" },
-    { name: "汉堡+薯条", kcal: 880, protein: 35.0, carbs: 95.0, fat: 40.0, category: "菜肴", portion: "1份", warn: true },
-    { name: "炸鸡块(5块)", kcal: 550, protein: 32.0, carbs: 40.0, fat: 28.0, category: "菜肴", portion: "1份", warn: true },
-    { name: "烤鱼", kcal: 260, protein: 30.0, carbs: 6.0, fat: 14.0, category: "菜肴", portion: "约300g" },
-    { name: "蛋炒饭", kcal: 420, protein: 15.0, carbs: 60.0, fat: 12.0, category: "菜肴", portion: "1盘" },
-    { name: "麻辣香锅", kcal: 550, protein: 30.0, carbs: 35.0, fat: 32.0, category: "菜肴", portion: "1份", warn: true },
-    { name: "三文鱼牛油果沙拉", kcal: 420, protein: 28.0, carbs: 18.0, fat: 28.0, category: "菜肴", portion: "约350g" },
-    { name: "杂粮碗", kcal: 480, protein: 25.0, carbs: 65.0, fat: 12.0, category: "菜肴", portion: "1碗" },
-    { name: "三明治", kcal: 380, protein: 18.0, carbs: 42.0, fat: 14.0, category: "菜肴", portion: "1份" },
-    { name: "披萨(2块)", kcal: 560, protein: 24.0, carbs: 62.0, fat: 22.0, category: "菜肴", portion: "2块", warn: true },
-    { name: "奶茶(大杯)", kcal: 420, protein: 8.0, carbs: 68.0, fat: 13.0, category: "饮料", portion: "大杯", warn: true },
-    { name: "可乐(听装)", kcal: 140, protein: 0, carbs: 35.0, fat: 0, category: "饮料", portion: "330ml", warn: true },
+    { name: "蛋白粉(1勺)", kcal: 400, protein: 80.0, carbs: 10.0, fat: 6.0, category: "零食" },
+    { name: "无糖酸奶", kcal: 57, protein: 10.0, carbs: 3.6, fat: 0.4, category: "零食" },
+    { name: "苏打饼干", kcal: 408, protein: 8.0, carbs: 76.0, fat: 8.0, category: "零食" },
+    { name: "薯片", kcal: 536, protein: 7.0, carbs: 53.0, fat: 35.0, category: "零食" },
+    { name: "蛋白棒", kcal: 350, protein: 30.0, carbs: 40.0, fat: 10.0, category: "零食" },
+    { name: "冰激凌", kcal: 207, protein: 3.5, carbs: 24.0, fat: 11.0, category: "零食" },
   ],
 };
 
-// 饮食模式 → 排除规则
+// 常见菜肴（整份估算：[名称, 整份克数, kcal, 蛋白, 碳水, 脂肪, 标签]）
+const DISH_ROWS = [
+  ["蛋炒饭", 350, 480, 16, 62, 16],
+  ["扬州炒饭", 350, 520, 18, 66, 18],
+  ["牛肉面", 520, 520, 25, 65, 18],
+  ["兰州拉面", 520, 480, 22, 70, 12],
+  ["炒面", 350, 520, 16, 68, 18],
+  ["炒河粉", 350, 550, 15, 72, 20],
+  ["阳春面", 400, 300, 8, 55, 6],
+  ["酸辣粉", 400, 380, 8, 62, 12],
+  ["过桥米线", 450, 350, 12, 60, 8],
+  ["水饺(10个)", 250, 420, 18, 48, 16],
+  ["小笼包(6个)", 200, 380, 14, 42, 15],
+  ["煎饼果子", 250, 480, 14, 55, 20],
+  ["豆浆油条", 300, 450, 9, 55, 20, "warn"],
+  ["番茄炒蛋(1份)", 250, 220, 13, 14, 12],
+  ["黄瓜炒蛋", 250, 170, 10, 8, 11],
+  ["韭菜炒蛋", 220, 210, 12, 8, 14],
+  ["西红柿炖牛腩", 350, 380, 28, 14, 24],
+  ["土豆炖牛肉", 350, 420, 26, 30, 20],
+  ["红烧牛肉", 300, 400, 32, 10, 26],
+  ["红烧肉", 150, 480, 20, 12, 40, "warn"],
+  ["回锅肉", 200, 450, 20, 10, 38, "warn"],
+  ["梅菜扣肉", 200, 520, 18, 14, 45, "warn"],
+  ["糖醋里脊", 250, 480, 22, 40, 26, "warn"],
+  ["糖醋排骨", 220, 520, 24, 30, 35, "warn"],
+  ["可乐鸡翅", 250, 420, 26, 18, 26],
+  ["宫保鸡丁", 300, 380, 28, 25, 18],
+  ["鱼香肉丝", 260, 340, 17, 22, 20],
+  ["青椒肉丝", 250, 300, 19, 12, 18],
+  ["辣椒炒肉", 230, 380, 22, 10, 30],
+  ["蒜苔炒肉", 240, 300, 18, 12, 20],
+  ["豆角焖面", 400, 520, 18, 70, 18],
+  ["地三鲜", 300, 420, 8, 45, 28, "warn"],
+  ["干煸豆角", 250, 320, 8, 20, 24],
+  ["麻婆豆腐", 300, 330, 16, 18, 22],
+  ["家常豆腐", 300, 360, 18, 16, 26],
+  ["皮蛋豆腐", 250, 220, 14, 8, 15],
+  ["白菜炖豆腐", 350, 230, 14, 16, 12],
+  ["鲫鱼豆腐汤", 350, 200, 20, 8, 9],
+  ["紫菜蛋花汤", 350, 80, 6, 5, 4],
+  ["番茄鸡蛋汤", 350, 100, 5, 8, 5],
+  ["冬瓜排骨汤", 400, 230, 18, 6, 15],
+  ["玉米排骨汤", 400, 250, 17, 20, 14],
+  ["丝瓜蛋汤", 350, 90, 5, 6, 5],
+  ["清炒时蔬(1份)", 200, 90, 4, 8, 5],
+  ["蒜蓉西兰花", 200, 110, 5, 9, 6],
+  ["清炒菠菜", 200, 80, 4, 6, 5],
+  ["上汤娃娃菜", 300, 120, 6, 8, 7],
+  ["白灼菜心", 200, 70, 4, 6, 3],
+  ["凉拌黄瓜", 200, 60, 2, 7, 4],
+  ["凉拌木耳", 200, 110, 3, 14, 6],
+  ["醋溜土豆丝", 250, 260, 4, 35, 12],
+  ["干锅花菜", 250, 300, 8, 20, 22],
+  ["蚝油生菜", 200, 90, 3, 7, 6],
+  ["清蒸鲈鱼", 350, 210, 30, 3, 8],
+  ["酸菜鱼", 500, 480, 40, 12, 30],
+  ["水煮鱼", 500, 600, 45, 10, 45, "warn"],
+  ["香煎鸡胸", 180, 260, 35, 2, 11],
+  ["烤鸡腿", 200, 380, 30, 4, 25],
+  ["照烧鸡腿", 220, 400, 28, 18, 24],
+  ["卤牛肉", 150, 240, 30, 5, 12],
+  ["手撕鸡", 200, 300, 32, 4, 16],
+  ["白切鸡", 200, 320, 28, 2, 22],
+  ["啤酒鸭", 300, 420, 26, 10, 30],
+  ["鸭血粉丝汤", 400, 300, 18, 30, 12],
+  ["毛血旺", 400, 550, 30, 18, 40, "warn"],
+  ["麻辣香锅", 400, 550, 30, 35, 32, "warn"],
+  ["干锅牛蛙", 350, 480, 38, 14, 30],
+  ["烤羊肉串(5串)", 200, 400, 30, 5, 30],
+  ["烤鸭(半只)", 400, 700, 40, 8, 55, "warn"],
+  ["小鸡炖蘑菇", 350, 380, 26, 14, 24],
+  ["红烧鸡块", 300, 420, 28, 14, 28],
+  ["烤鱼", 350, 260, 30, 6, 14],
+  ["健身沙拉鸡胸", 400, 320, 35, 20, 10],
+  ["三文鱼牛油果沙拉", 350, 420, 28, 18, 28],
+  ["杂粮碗", 420, 480, 25, 65, 12],
+  ["三明治", 180, 380, 18, 42, 14],
+  ["汉堡+薯条", 450, 880, 35, 95, 40, "warn"],
+  ["牛肉汉堡", 250, 550, 26, 45, 28, "warn"],
+  ["鸡肉卷", 200, 400, 18, 40, 18],
+  ["炸鸡块(5块)", 200, 550, 32, 40, 28, "warn"],
+  ["披萨(2块)", 300, 560, 24, 62, 22, "warn"],
+  ["麻辣烫(多素)", 500, 420, 20, 45, 20],
+  ["麻辣烫(多肉)", 500, 620, 35, 40, 38, "warn"],
+  ["关东煮", 300, 250, 15, 25, 8],
+  ["寿司(8贯)", 300, 450, 20, 65, 10],
+  ["韩式拌饭", 450, 600, 25, 75, 20],
+  ["咖喱鸡饭", 500, 700, 30, 80, 28],
+  ["黄焖鸡米饭", 500, 750, 35, 85, 30, "warn"],
+  ["卤肉饭", 450, 650, 24, 80, 26, "warn"],
+  ["煲仔饭", 450, 700, 28, 85, 26, "warn"],
+  ["奶茶(大杯)", 500, 420, 8, 68, 13, "warn"],
+  ["可乐(听装)", 330, 140, 0, 35, 0, "warn"],
+  ["拿铁(中杯)", 350, 190, 9, 18, 7],
+  ["美式咖啡(大杯)", 480, 10, 0.5, 1, 0],
+  ["鲜榨橙汁", 300, 150, 2, 33, 0],
+  ["啤酒(瓶)", 500, 180, 2, 12, 0, "warn"],
+  ["燕麦牛奶", 300, 320, 10, 45, 10],
+  ["鸡蛋灌饼", 250, 450, 15, 40, 25],
+  ["豆浆+包子", 350, 380, 14, 50, 12],
+  ["全麦三明治", 200, 320, 18, 30, 12],
+  ["希腊酸奶+水果", 250, 200, 15, 22, 4],
+  ["蛋白粉冲饮", 250, 160, 25, 5, 2],
+  ["水果拼盘", 300, 150, 2, 36, 1],
+  ["白粥", 300, 140, 4, 30, 1],
+  ["南瓜粥", 300, 180, 4, 38, 1],
+  ["八宝粥", 300, 260, 6, 50, 4],
+  ["皮蛋瘦肉粥", 350, 280, 12, 35, 10],
+  ["小米粥", 300, 140, 4, 28, 2],
+  ["酸奶(无糖)", 150, 90, 6, 8, 3],
+  ["薯片(小包)", 40, 215, 3, 21, 14, "warn"],
+  ["饼干(3片)", 30, 122, 2, 23, 2],
+  ["坚果一小把", 30, 180, 6, 6, 16],
+  ["黑巧克力2块", 20, 110, 1, 12, 6],
+  ["蛋白棒(1根)", 60, 210, 18, 24, 6],
+];
+
+FOOD_LIBRARY.dish = DISH_ROWS.map(r => ({
+  name: r[0], kcal: r[2], protein: r[3], carbs: r[4], fat: r[5],
+  category: "菜肴", unitGrams: r[1], portion: "约 " + r[1] + "g", warn: r[6] === "warn",
+}));
+
+// 全量索引（供搜索 / 手动补录）
+const ALL_FOODS = [
+  ...FOOD_LIBRARY.staple,
+  ...FOOD_LIBRARY.protein,
+  ...FOOD_LIBRARY.veggie,
+  ...FOOD_LIBRARY.fruit,
+  ...FOOD_LIBRARY.snack,
+  ...FOOD_LIBRARY.dish,
+];
+
+// 常用食物（一键补录，用户也可自行收藏）
+const QUICK_FOODS = [
+  "白米饭", "鸡胸肉", "鸡蛋", "牛奶", "全麦面包", "苹果",
+  "香蕉", "无糖酸奶", "西兰花", "番茄炒蛋(1份)", "烤鸡腿", "豆浆(无糖)",
+];
+
+// 份量快捷系数（相对于「一份」）
+const PORTION_SCALE = {
+  half: { label: "半份", scale: 0.6 },
+  one: { label: "一份", scale: 1 },
+  large: { label: "大份", scale: 1.5 },
+};
+
+// ===================== 饮食偏好规则 =====================
+const ANIMAL_WORDS = ["猪", "牛", "羊", "鸡", "鸭", "鱼", "虾", "蟹", "鱿", "贝", "蛙",
+  "肉", "排骨", "培根", "火腿", "香肠", "腊", "烤鸭"];
+
+function isAnimalFood(food) {
+  if (food.name.includes("鸡蛋") || food.name.includes("蛋白") || food.name.includes("皮蛋")) return false;
+  return ANIMAL_WORDS.some(w => food.name.includes(w));
+}
+
+const VEG_PROTEIN_WORDS = ["豆腐", "豆干", "豆浆", "豆皮", "毛豆", "酸奶", "牛奶", "蛋白"];
+
 const DIET_PREFERENCE_RULES = {
-  vegetarian: (food) => food.category !== "蛋白" || food.name.includes("豆腐") || food.name.includes("酸奶") || food.name.includes("牛奶") || food.name.includes("蛋白"),
-  "no-seafood": (food) => !food.name.includes("鱼") && !food.name.includes("虾") && !food.name.includes("三文鱼"),
-  "no-dairy": (food) => !food.name.includes("牛奶") && !food.name.includes("酸奶"),
-  "no-gluten": (food) => !food.name.includes("面") && !food.name.includes("面包") && !food.name.includes("馒头"),
+  vegetarian: (food) => {
+    if (isAnimalFood(food)) return false;
+    if (food.category === "蛋白" && !VEG_PROTEIN_WORDS.some(w => food.name.includes(w))) return false;
+    return true;
+  },
+  "no-seafood": (food) => !["鱼", "虾", "蟹", "鱿", "贝", "海带", "紫菜", "带鱼"].some(w => food.name.includes(w)),
+  "no-dairy": (food) => !["牛奶", "酸奶", "奶酪", "拿铁", "冰激凌"].some(w => food.name.includes(w)),
+  "no-gluten": (food) => !["面", "面包", "馒头", "饺子", "包子", "饼", "三明治", "汉堡", "披萨", "饼干", "油条"].some(w => food.name.includes(w)),
 };

@@ -146,6 +146,7 @@
             <div class="metric-label">脂肪</div>
           </div>
         </div>
+        <div class="week-budget" id="week-budget"></div>
       </div>
 
       <div class="card">
@@ -191,7 +192,7 @@
       </div>
       <div class="card">
         <div class="card-title">📸 拍照验收</div>
-        <p class="hint-text">在某一餐旁边点击"拍照验收"，或点击下方按钮选择图片来模拟拍照。</p>
+        <p class="hint-text">在某一餐旁边点击"拍照验收"，或点击下方按钮选择图片。识别不准可以直接搜索补录，不会卡住你。</p>
         <div class="photo-simulator">
           <input type="file" id="photo-input" accept="image/*" hidden>
           <button class="btn primary" id="btn-photo-open">📷 选择一张食物照片</button>
@@ -211,9 +212,16 @@
         <div id="week-review" class="week-review"></div>
       </div>
       <div class="card">
+        <div class="card-title">⚖️ 体重 / 围度</div>
+        <div id="weight-card" class="weight-card"></div>
+      </div>
+      <div class="card">
         <div class="card-title">🔔 提醒设置</div>
         <div class="reminder-settings" id="reminder-settings"></div>
-        <button class="btn primary" id="btn-enable-notif">🔔 开启通知权限</button>
+        <div class="reminder-actions">
+          <button class="btn primary" id="btn-calendar">📅 存到手机日历（兜底）</button>
+          <button class="btn ghost" id="btn-sub-renew">📩 续订 1 条消息</button>
+        </div>
       </div>
     </div>
 
