@@ -42,10 +42,14 @@ const App = (() => {
     return tdee; // tone
   }
 
-  function calcMacro(targetKcal, goal) {
+  function calcMacro(targetKcal, goal, prefs) {
     let pct = { carbs: 0.38, protein: 0.30, fat: 0.32 }; // fatloss
     if (goal === "muscle") pct = { carbs: 0.45, protein: 0.28, fat: 0.27 };
     if (goal === "tone")   pct = { carbs: 0.42, protein: 0.30, fat: 0.28 };
+    // 饮食偏好微调：高蛋白抬蛋白、低碳水压碳水，差额由脂肪补；每项增量合计为 0，比例仍归一
+    const list = prefs || [];
+    if (list.includes("high-protein")) { pct.protein += 0.06; pct.carbs -= 0.02; pct.fat -= 0.04; }
+    if (list.includes("low-carb"))     { pct.carbs -= 0.10; pct.protein += 0.04; pct.fat += 0.06; }
     return {
       carbs: Math.round(targetKcal * pct.carbs / 4),
       protein: Math.round(targetKcal * pct.protein / 4),
@@ -198,20 +202,30 @@ const App = (() => {
     ];
   }
 
+  // 主食 / 蛋白 / 蔬菜的热量占比，随饮食偏好调整
+  function mealRatio(prefs) {
+    const list = prefs || [];
+    const r = { protein: 0.4, staple: 0.4, veggie: 0.2 };
+    if (list.includes("high-protein")) { r.protein += 0.08; r.staple -= 0.08; }
+    if (list.includes("low-carb"))     { r.staple -= 0.10; r.veggie += 0.10; }
+    return r;
+  }
+
   // 根据目标卡路里组一顿饭（主食 + 蛋白 + 蔬菜）
   function composeMeal(targetKcal, prefs) {
     const staples = applyFoodPrefs(FOOD_LIBRARY.staple, prefs);
     const proteins = applyFoodPrefs(FOOD_LIBRARY.protein, prefs);
     const veggies = applyFoodPrefs(FOOD_LIBRARY.veggie, prefs);
+    const ratio = mealRatio(prefs);
 
     const staple = rand(staples);
     const protein = rand(proteins);
     const veggie = rand(veggies);
 
     return [
-      makeItem(protein, servingsForKcal(protein, targetKcal * 0.4)),
-      makeItem(staple, servingsForKcal(staple, targetKcal * 0.4)),
-      makeItem(veggie, servingsForKcal(veggie, targetKcal * 0.2)),
+      makeItem(protein, servingsForKcal(protein, targetKcal * ratio.protein)),
+      makeItem(staple, servingsForKcal(staple, targetKcal * ratio.staple)),
+      makeItem(veggie, servingsForKcal(veggie, targetKcal * ratio.veggie)),
     ];
   }
 
@@ -240,7 +254,7 @@ const App = (() => {
   function generatePlan(profile) {
     const freq = getTrainingFrequency(profile);
     const targetKcal = calcTargetKcal(profile);
-    const macro = calcMacro(targetKcal, profile.goal);
+    const macro = calcMacro(targetKcal, profile.goal, profile.prefs);
     const mealSplit = mealKcalSplit(targetKcal);
     const trainDays = workoutDaySet(freq.days);
 
