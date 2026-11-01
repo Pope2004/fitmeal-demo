@@ -366,7 +366,7 @@ const QUICK_FOODS = [
 
 // 份量快捷系数（相对于「一份」）
 const PORTION_SCALE = {
-  half: { label: "半份", scale: 0.6 },
+  half: { label: "半份", scale: 0.5 },
   one: { label: "一份", scale: 1 },
   large: { label: "大份", scale: 1.5 },
 };
@@ -380,7 +380,7 @@ function isAnimalFood(food) {
   return ANIMAL_WORDS.some(w => food.name.includes(w));
 }
 
-const VEG_PROTEIN_WORDS = ["豆腐", "豆干", "豆浆", "豆皮", "毛豆", "酸奶", "牛奶", "蛋白"];
+const VEG_PROTEIN_WORDS = ["豆腐", "豆干", "豆浆", "豆皮", "毛豆", "酸奶", "牛奶", "蛋白", "鸡蛋", "皮蛋"];
 
 const DIET_PREFERENCE_RULES = {
   vegetarian: (food) => {

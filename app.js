@@ -3,7 +3,7 @@
 const App = (() => {
 
   // ============== 存储层 ==============
-  const DB_KEY = "fitmeal_db_v2";
+  const DB_KEY = "fitmeal_db_v3";
 
   function loadDB() {
     try {
@@ -96,20 +96,17 @@ const App = (() => {
       const key = cycle[dayIndex % 2];
       groups = key === "upper" ? ["chest", "back", "shoulders", "arms"] : ["legs", "core"];
     } else if (freq.split === "ppl-advanced") {
-      const cycle = ["push", "pull", "legs", "push", "pull", "rest"];
+      const cycle = ["push", "pull", "legs", "push", "pull", "legs"];
       const map = {
         push: ["chest", "shoulders", "arms"],
         pull: ["back", "arms"],
         legs: ["legs", "core"],
       };
-      const key = cycle[dayIndex % 6];
-      if (key === "rest") return null;
-      groups = map[key];
+      groups = map[cycle[dayIndex % 6]];
     }
     const count = experience === "beginner" ? 8 : 10;
     const exercises = pickExercises(groups, count);
-    const estDuration = exercises.reduce((s, e) => s + e.duration, 0) / 60 + 10; // + warmup
-    return { exercises, durationMin: Math.round(estDuration) };
+    return { exercises, durationMin: freq.minutes };
   }
 
   // 食物过滤（根据偏好）
@@ -230,21 +227,31 @@ const App = (() => {
     ];
   }
 
+  // 每周训练日的分布：均匀铺开，休息日不堆在同一天
+  function workoutDaySet(n) {
+    const patterns = {
+      1: [3], 2: [1, 4], 3: [1, 3, 5], 4: [1, 2, 4, 5],
+      5: [1, 2, 3, 5, 6], 6: [1, 2, 3, 4, 5, 6], 7: [0, 1, 2, 3, 4, 5, 6],
+    };
+    return patterns[n] || [0, 1, 2, 3, 4, 5, 6].slice(0, n);
+  }
+
   // 生成完整 7 天计划
   function generatePlan(profile) {
     const freq = getTrainingFrequency(profile);
     const targetKcal = calcTargetKcal(profile);
     const macro = calcMacro(targetKcal, profile.goal);
     const mealSplit = mealKcalSplit(targetKcal);
+    const trainDays = workoutDaySet(freq.days);
 
     const days = [];
+    let seq = 0;
     for (let i = 0; i < 7; i++) {
-      // 判断是训练日还是休息日
-      const isWorkoutDay = (freq.split === "ppl-advanced")
-        ? (i % 6 !== 5) // ppl advanced 第6天休息
-        : (i * freq.days < 7 * freq.days / 7 ? (i % Math.ceil(7/freq.days) !== 0) : (i < freq.days));
+      // 休息日不生成训练，保证一周训练次数与 freq.days 一致
+      const workout = trainDays.includes(i)
+        ? generateWorkoutDay(seq++, freq, profile.goal, profile.experience)
+        : null;
 
-      const workout = generateWorkoutDay(i, freq, profile.goal, profile.experience);
       const meals = mealSplit.map(m => {
         let foods;
         if (m.name === "加餐") foods = composeSnack(m.targetKcal, profile.prefs);
@@ -268,7 +275,7 @@ const App = (() => {
 
     return {
       generatedAt: Date.now(),
-      startDate: getMonday(new Date()).toISOString().slice(0, 10),
+      startDate: fmtDate(getMonday(new Date())),
       targetKcal,
       macro,
       freq,
@@ -530,10 +537,6 @@ const App = (() => {
     toast("日历提醒已生成，导入后 30 天有效");
   }
 
-  function sendNotification(title, body) {
-    try { new Notification(title, { body }); } catch(e) {}
-  }
-
   // ============== 日志 & 进度 ==============
   function fmtDate(d) {
     const y = d.getFullYear();
@@ -558,6 +561,8 @@ const App = (() => {
     if (!db.logs[date]) db.logs[date] = { workouts: {}, meals: {}, kcal: 0, protein: 0 };
     if (typeof db.logs[date].kcal !== "number") db.logs[date].kcal = 0;
     if (typeof db.logs[date].protein !== "number") db.logs[date].protein = 0;
+    if (!db.logs[date].mealKcal) db.logs[date].mealKcal = {};
+    if (!db.logs[date].mealProtein) db.logs[date].mealProtein = {};
     return db.logs[date];
   }
 
@@ -570,12 +575,16 @@ const App = (() => {
   }
 
   // 验收确认：记录这餐整体结果，计入本周额度
+  // 同一餐重复验收只覆盖旧值，不重复累加
   function logMealResult(mealIdx, analysis) {
     const date = getTodayDate();
     const log = ensureLog(date);
+    log.mealKcal[mealIdx] = analysis.totalKcal;
+    log.mealProtein[mealIdx] = analysis.macro.protein;
+    // 直接由每餐记录汇总，重复验收只覆盖不叠加
+    log.kcal = Object.values(log.mealKcal).reduce((a, b) => a + b, 0);
+    log.protein = Object.values(log.mealProtein).reduce((a, b) => a + b, 0);
     log.meals[mealIdx] = true;
-    log.kcal += analysis.totalKcal;
-    log.protein += analysis.macro.protein;
     saveDB(db);
   }
 
@@ -640,7 +649,7 @@ const App = (() => {
 
   function getWeeklyStats() {
     if (!db.plan) return [];
-    const start = new Date(db.plan.startDate);
+    const start = new Date(db.plan.startDate + "T00:00:00");
     const days = [];
     const today = new Date();
     today.setHours(0,0,0,0);
@@ -656,7 +665,7 @@ const App = (() => {
       const wTotal = planDay.workout ? planDay.workout.exercises.length : 0;
       const wDone = planDay.workout
         ? planDay.workout.exercises.filter((_, j) => logs.workouts[j]).length
-        : (planDay.workout === null ? 1 : 0); // 休息日自动完成
+        : 0; // 休息日不计入分母，避免完成度超过 100%
       const mDone = planDay.meals.filter((_, j) => logs.meals[j]).length;
       const mTotal = planDay.meals.length;
 
@@ -672,10 +681,27 @@ const App = (() => {
     const stats = getWeeklyStats();
     const past = stats.filter(s => !s.future && s.pct !== null);
     if (past.length === 0) return [];
+
+    const hasActivity = Object.keys(db.logs || {}).some(k => {
+      const l = db.logs[k] || {};
+      return (l.kcal || 0) > 0
+        || !!(l.meals && Object.values(l.meals).some(Boolean))
+        || !!(l.workouts && Object.values(l.workouts).some(Boolean));
+    });
+
+    const items = [];
+    if (!hasActivity) {
+      // 刚开始用：不展示 0% 这种打击性结论
+      items.push("本周还没有记录，今天从一餐或一次训练开始就行，不用追求满分");
+      const budget0 = getWeeklyBudget();
+      if (budget0) items.push(`本周额度 ${budget0.quota} kcal，吃超了也只是提示，不会判你失败`);
+      items.push(`训练频率：每周 ${db.plan?.freq?.days} 天，每次 ${db.plan?.freq?.minutes} 分钟`);
+      return items;
+    }
+
     const avg = Math.round(past.reduce((s, d) => s + d.pct, 0) / past.length);
     const above90 = past.filter(d => d.pct >= 90).length;
     const below60 = past.filter(d => d.pct < 60).length;
-    const items = [];
     items.push(`本周平均完成度 <strong>${avg}%</strong>`);
     if (above90 >= 3) items.push(`有 <strong>${above90}</strong> 天完成度 ≥ 90%，继续保持！🔥`);
     if (below60 >= 2) items.push(`有 <strong>${below60}</strong> 天完成不足 60%，试试把计划拆得更简单？`);
@@ -686,7 +712,7 @@ const App = (() => {
       items.push(`本周额度已用 <strong>${usedPct}%</strong>，还剩 ${Math.max(0, Math.round(budget.remaining))} kcal，周末聚餐不用有负担`);
     }
 
-    const recs = db.records || [];
+    const recs = [...(db.records || [])].sort((a, b) => a.date.localeCompare(b.date));
     if (recs.length >= 2) {
       const delta = (recs[recs.length - 1].weight - recs[0].weight).toFixed(1);
       const sign = delta > 0 ? "+" : "";
@@ -757,6 +783,7 @@ const App = (() => {
       const allDone = todayPlan.workout.exercises.every((_, i) => logs.workouts[i]);
       items.push({
         time: "19:00",
+        minutes: timeToMinutes("19:00"),
         title: "💪 今日训练",
         desc: `${todayPlan.workout.exercises.length} 个动作 · 约 ${todayPlan.workout.durationMin} 分钟`,
         id: "workout",
@@ -772,6 +799,7 @@ const App = (() => {
     } else {
       items.push({
         time: "全天",
+        minutes: 0,
         title: "😴 训练休息日",
         desc: "建议散步 30 分钟或充分拉伸",
         done: true,
@@ -785,6 +813,7 @@ const App = (() => {
       const done = logs.meals[i];
       items.push({
         time: meal.time,
+        minutes: timeToMinutes(meal.time),
         title: `🍽️ ${meal.name}`,
         desc: `目标 ${meal.targetKcal} kcal`,
         id: `meal-${i}`,
@@ -794,16 +823,18 @@ const App = (() => {
       });
     });
 
+    items.sort((a, b) => a.minutes - b.minutes);
+
     items.forEach(it => {
       const div = document.createElement("div");
       div.className = "timeline-item" + (it.done ? " done" : "");
       div.innerHTML = `
         <div class="check-mark">✓</div>
+        <div class="tl-time">${it.time}</div>
         <div class="tl-body">
           <div class="tl-title">${it.title}</div>
           <div class="tl-desc">${it.desc}</div>
         </div>
-        <div class="tl-time">${it.time}</div>
         <button class="tl-action">${it.action}</button>
       `;
       div.querySelector(".tl-action").onclick = it.onClick;
@@ -831,7 +862,7 @@ const App = (() => {
     el.innerHTML = "";
     if (!db.plan) return;
 
-    const start = new Date(db.plan.startDate);
+    const start = new Date(db.plan.startDate + "T00:00:00");
     const today = new Date(); today.setHours(0,0,0,0);
 
     db.plan.days.forEach((day, i) => {
@@ -851,8 +882,6 @@ const App = (() => {
       el.appendChild(div);
     });
 
-    const nextMonday = new Date(start);
-    nextMonday.setDate(nextMonday.getDate() + 7);
     const end = new Date(start);
     end.setDate(end.getDate() + 6);
     $("#week-label").textContent = `第 1 周 · ${start.getMonth()+1}/${start.getDate()} – ${end.getMonth()+1}/${end.getDate()}`;
@@ -909,7 +938,9 @@ const App = (() => {
 
     // 饮食
     html += `<div class="day-section-title">🍽️ 饮食方案</div>`;
-    day.meals.forEach(m => {
+    [...day.meals]
+      .sort((a, b) => timeToMinutes(a.time) - timeToMinutes(b.time))
+      .forEach(m => {
       html += `<div class="meal-card" style="margin-bottom:10px">
         <div class="meal-card-header"><span>${m.name} · ${m.time}</span><span>${m.targetKcal} kcal</span></div>
         <div class="meal-card-body">`;
@@ -920,6 +951,9 @@ const App = (() => {
     });
 
     el.innerHTML = html;
+    $$("#week-days .week-day").forEach(d => {
+      d.classList.toggle("selected", parseInt(d.dataset.day) === dayIdx);
+    });
   }
 
   function renderMealList() {
@@ -930,7 +964,10 @@ const App = (() => {
 
     const logs = db.logs[getTodayDate()] || { workouts: {}, meals: {} };
 
-    todayPlan.meals.forEach((meal, i) => {
+    todayPlan.meals
+      .map((meal, i) => ({ meal, i }))
+      .sort((a, b) => timeToMinutes(a.meal.time) - timeToMinutes(b.meal.time))
+      .forEach(({ meal, i }) => {
       const done = !!logs.meals[i];
       let html = `
         <div class="meal-card">
@@ -1138,7 +1175,7 @@ const App = (() => {
   // 任何一步都能确认验收，不因识别失败卡住用户
   let photoState = null;
 
-  function openPhotoModal(meal, mealIdx) {
+  function openPhotoModal(meal, mealIdx, fileName) {
     if (!meal) return;
     photoState = { meal, mealIdx, items: null };
     const modal = $("#photo-modal");
@@ -1164,6 +1201,7 @@ const App = (() => {
       runPhotoAnalysis(f.name || "photo_" + Date.now());
     };
     body.querySelector("#pf-auto").onclick = () => runPhotoAnalysis("meal_" + meal.name + "_" + Date.now());
+    if (fileName) runPhotoAnalysis(fileName);
   }
 
   function runPhotoAnalysis(fileName) {
@@ -1190,7 +1228,7 @@ const App = (() => {
     if (!resultEl) return;
     resultEl.innerHTML = `
       <div class="pf-note">AI 估算，误差约 ±15%；以吃进去的量为准，不必精确到个位数。</div>
-      <div class="pf-section-title">🔍 识别到 ${currentPhotoItems().length} 样食物</div>
+      <div class="pf-section-title">${currentPhotoItems().length ? `🔍 识别到 ${currentPhotoItems().length} 样食物` : "🔍 还没识别到食物（可直接用下面的搜索补录）"}</div>
       <div class="pf-detected" id="pf-items"></div>
       <div class="pf-fallback">
         <div class="pf-section-title">识别不准？手动补录（约 3 秒）</div>
@@ -1216,9 +1254,10 @@ const App = (() => {
           : "";
         return;
       }
-      list.innerHTML = foods.map(f =>
-        `<button class="pf-suggest" data-add="${f.name}">${f.name}<span>${f.kcal} kcal/份</span></button>`
-      ).join("");
+      list.innerHTML = foods.map(f => {
+        const unit = f.category === "菜肴" ? "整份" : (f.unitGrams || 100) + "g";
+        return `<button class="pf-suggest" data-add="${f.name}">${f.name}<span>${f.kcal} kcal/${unit}</span></button>`;
+      }).join("");
       list.querySelectorAll("[data-add]").forEach(b => b.onclick = () => addFoodByName(b.dataset.add));
     };
   }
@@ -1385,11 +1424,16 @@ const App = (() => {
       };
     }
 
-    // Chip 高亮
+    // Chip 高亮（多选只切换自己，单选才清空同组）
     $$(".chip input").forEach(input => {
       input.addEventListener("change", () => {
-        input.closest(".chip-group").querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
-        input.closest(".chip").classList.add("active");
+        const chip = input.closest(".chip");
+        if (input.type === "checkbox") {
+          chip.classList.toggle("active", input.checked);
+        } else {
+          input.closest(".chip-group").querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+          chip.classList.add("active");
+        }
       });
     });
 
@@ -1437,6 +1481,16 @@ const App = (() => {
     });
   }
 
+  // 周计划左右切换（当前只有 1 周计划）
+  function initWeekNav() {
+    const prev = $("#week-prev");
+    const next = $("#week-next");
+    if (!prev || !next) return;
+    const tip = () => toast("目前只生成了第 1 周计划，重新设置画像可生成新的一周");
+    prev.onclick = tip;
+    next.onclick = tip;
+  }
+
   // 提醒：一次性订阅额度 + 系统日历兜底
   function initNotifications() {
     const calBtn = $("#btn-calendar");
@@ -1477,10 +1531,13 @@ const App = (() => {
       const reader = new FileReader();
       reader.onload = ev => {
         preview.innerHTML = `<img src="${ev.target.result}" alt="预览">`;
-        // 直接打开验收弹窗
+        // 直接打开验收弹窗，优先选还没验收的那一餐
         const todayPlan = db.plan?.days?.[getDayOffset()];
-        if (todayPlan && todayPlan.meals[0]) {
-          openPhotoModal(todayPlan.meals[0], 0);
+        if (todayPlan && todayPlan.meals.length) {
+          const logs = db.logs[getTodayDate()] || { meals: {} };
+          const idx = todayPlan.meals.findIndex((_, i) => !logs.meals[i]);
+          const targetIdx = idx >= 0 ? idx : 0;
+          openPhotoModal(todayPlan.meals[targetIdx], targetIdx, file.name);
         }
       };
       reader.readAsDataURL(file);
@@ -1497,6 +1554,7 @@ const App = (() => {
   function init() {
     initOnboarding();
     initTabs();
+    initWeekNav();
     initNotifications();
     initProfileEdit();
     initPhotoInput();

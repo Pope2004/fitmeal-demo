@@ -661,7 +661,7 @@ body {
 .pf-summary.pass { background: var(--primary-light); }
 .pf-summary.warn { background: #fff8c5; }
 .pf-summary.fail { background: #ffebe9; }
-.pf-verdict { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+.pf-verdict { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
 .pf-summary.pass .pf-verdict { color: var(--primary); }
 .pf-summary.warn .pf-verdict { color: var(--warn); }
 .pf-summary.fail .pf-verdict { color: var(--danger); }
@@ -691,7 +691,7 @@ body {
   border-radius: 3px;
   transition: width 0.4s ease;
 }
-.macro-bar.m-carb .bar-fill { background: #54aeff; }
+.macro-bar.m-carbs .bar-fill { background: #54aeff; }
 .macro-bar.m-protein .bar-fill { background: var(--primary); }
 .macro-bar.m-fat .bar-fill { background: #bf871d; }
 .macro-bar .bar-label { font-size: 11px; margin-top: 4px; color: var(--text-muted); }
